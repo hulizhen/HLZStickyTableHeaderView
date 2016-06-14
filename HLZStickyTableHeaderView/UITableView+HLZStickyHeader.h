@@ -10,6 +10,13 @@
 
 @interface UITableView (HLZStickyHeader)
 
+/** The view you want to add to the top of table view. */
 @property (nonatomic, strong) UIView *stickyHeaderView;
+
+/** The minimal height of the sticky header view. */
+@property (nonatomic, assign) CGFloat stickyHeaderViewHeightMin;
+
+/** The maximal height of the sticky header view. */
+@property (nonatomic, assign) CGFloat stickyHeaderViewHeightMax;
 
 @end

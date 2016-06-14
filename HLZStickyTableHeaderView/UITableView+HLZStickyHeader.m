@@ -11,9 +11,6 @@
 
 @implementation UITableView (HLZStickyHeader)
 
-static float const TableHeaderViewHeightMin = 220;
-static float const TableHeaderViewHeightMax = 320;
-
 #pragma mark - Lifecycle
 
 + (void)load {
@@ -42,19 +39,47 @@ static float const TableHeaderViewHeightMax = 320;
     // Put scroll view into the top inset of table view.
     // This is exactly the trick to make scroll view stick to the top of view controller.
     [self addSubview:stickyHeaderView];
-    self.contentInset = UIEdgeInsetsMake(TableHeaderViewHeightMin, 0, 0, 0);
-    self.contentOffset = CGPointMake(0, -TableHeaderViewHeightMin);
+    self.contentInset = UIEdgeInsetsMake(self.stickyHeaderViewHeightMin, 0, 0, 0);
+    self.contentOffset = CGPointMake(0, -self.stickyHeaderViewHeightMin);
 }
 
 - (UIView *)stickyHeaderView {
     return objc_getAssociatedObject(self, @selector(stickyHeaderView));
 }
 
+- (void)setStickyHeaderViewHeightMin:(CGFloat)stickyHeaderViewHeightMin {
+    NSNumber *number = [NSNumber numberWithFloat:stickyHeaderViewHeightMin];
+    objc_setAssociatedObject(self, @selector(stickyHeaderViewHeightMin), number, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGFloat)stickyHeaderViewHeightMin {
+    NSNumber *number = objc_getAssociatedObject(self, @selector(stickyHeaderViewHeightMin));
+    if (number == nil) {
+        number = [[NSNumber alloc] initWithFloat:220];
+        objc_setAssociatedObject(self, @selector(stickyHeaderViewHeightMin), number, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return [number floatValue];
+}
+
+- (void)setStickyHeaderViewHeightMax:(CGFloat)stickyHeaderViewHeightMax {
+    NSNumber *number = [NSNumber numberWithFloat:stickyHeaderViewHeightMax];
+    objc_setAssociatedObject(self, @selector(stickyHeaderViewHeightMax), number, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGFloat)stickyHeaderViewHeightMax {
+    NSNumber *number = objc_getAssociatedObject(self, @selector(stickyHeaderViewHeightMax));
+    if (number == nil) {
+        number = [[NSNumber alloc] initWithFloat:320];
+        objc_setAssociatedObject(self, @selector(stickyHeaderViewHeightMax), number, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return [number floatValue];
+}
+
 // Update the scroll view's height, thus make it stretchable.
 - (void)updateTableViewHeader {
     // Stop stretching when the height of table view header is out of range.
     CGFloat contentOffsetX = self.contentOffset.x;
-    CGFloat contentOffsetY = self.contentOffset.y > -TableHeaderViewHeightMax ? self.contentOffset.y : -TableHeaderViewHeightMax;
+    CGFloat contentOffsetY = self.contentOffset.y > -self.stickyHeaderViewHeightMax ? self.contentOffset.y : -self.stickyHeaderViewHeightMax;
     
     self.contentOffset = CGPointMake(self.contentOffset.x, contentOffsetY);
     self.stickyHeaderView.frame = CGRectMake(contentOffsetX, contentOffsetY, [UIScreen mainScreen].bounds.size.width, -contentOffsetY);
