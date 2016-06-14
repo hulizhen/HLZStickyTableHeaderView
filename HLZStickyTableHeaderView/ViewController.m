@@ -7,8 +7,11 @@
 //
 
 #import "ViewController.h"
+#import "UITableView+HLZStickyHeader.h"
 
 @interface ViewController ()
+
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
 
 @end
 
@@ -16,12 +19,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    imageView.image = [UIImage imageNamed:@"TableHeader"];
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.tableView.stickyHeaderView = imageView;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 @end
