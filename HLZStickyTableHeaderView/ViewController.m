@@ -24,6 +24,8 @@
     imageView.image = [UIImage imageNamed:@"TableHeader"];
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.tableView.stickyHeaderView = imageView;
+    self.tableView.stickyHeaderViewHeightMin = 220;
+    self.tableView.stickyHeaderViewHeightMax = 320;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
